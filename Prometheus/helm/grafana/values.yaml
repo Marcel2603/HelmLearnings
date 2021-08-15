@@ -1,0 +1,243 @@
+grafana:
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server.default.svc
+        access: proxy
+        isDefault: true
+  adminUser: admin
+  adminPassword: password
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+  dashboards:
+    default:
+      second-service-dashboard:
+        json: |
+          {
+            "annotations": {
+              "list": [
+                {
+                  "builtIn": 1,
+                  "datasource": "-- Grafana --",
+                  "enable": true,
+                  "hide": true,
+                  "iconColor": "rgba(0, 211, 255, 1)",
+                  "name": "Annotations & Alerts",
+                  "target": {
+                    "limit": 100,
+                    "matchAny": false,
+                    "tags": [],
+                    "type": "dashboard"
+                  },
+                  "type": "dashboard"
+                }
+              ]
+            },
+            "editable": false,
+            "gnetId": null,
+            "graphTooltip": 0,
+            "id": 1,
+            "links": [],
+            "panels": [
+              {
+                "datasource": null,
+                "fieldConfig": {
+                  "defaults": {
+                    "color": {
+                      "mode": "palette-classic"
+                    },
+                    "custom": {
+                      "axisLabel": "",
+                      "axisPlacement": "auto",
+                      "barAlignment": 0,
+                      "drawStyle": "line",
+                      "fillOpacity": 0,
+                      "gradientMode": "none",
+                      "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                      },
+                      "lineInterpolation": "linear",
+                      "lineWidth": 1,
+                      "pointSize": 5,
+                      "scaleDistribution": {
+                        "type": "linear"
+                      },
+                      "showPoints": "auto",
+                      "spanNulls": false,
+                      "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                      },
+                      "thresholdsStyle": {
+                        "mode": "off"
+                      }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "green",
+                          "value": null
+                        },
+                        {
+                          "color": "red",
+                          "value": 80
+                        }
+                      ]
+                    }
+                  },
+                  "overrides": []
+                },
+                "gridPos": {
+                  "h": 8,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+                },
+                "id": 4,
+                "options": {
+                  "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom"
+                  },
+                  "tooltip": {
+                    "mode": "single"
+                  }
+                },
+                "targets": [
+                  {
+                    "exemplar": true,
+                    "expr": "system_cpu_usage{instance=\"http://second-service.default.svc\",job=\"second service\"}",
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "CPU"
+                  },
+                  {
+                    "exemplar": true,
+                    "expr": "up{instance=\"http://second-service.default.svc\",job=\"second service\"}",
+                    "hide": false,
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "A"
+                  }
+                ],
+                "title": "Panel Title",
+                "type": "timeseries"
+              },
+              {
+                "datasource": null,
+                "fieldConfig": {
+                  "defaults": {
+                    "color": {
+                      "mode": "palette-classic"
+                    },
+                    "custom": {
+                      "axisLabel": "",
+                      "axisPlacement": "auto",
+                      "barAlignment": 0,
+                      "drawStyle": "line",
+                      "fillOpacity": 0,
+                      "gradientMode": "none",
+                      "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                      },
+                      "lineInterpolation": "smooth",
+                      "lineWidth": 1,
+                      "pointSize": 5,
+                      "scaleDistribution": {
+                        "type": "linear"
+                      },
+                      "showPoints": "auto",
+                      "spanNulls": false,
+                      "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                      },
+                      "thresholdsStyle": {
+                        "mode": "off"
+                      }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "green",
+                          "value": null
+                        },
+                        {
+                          "color": "red",
+                          "value": 80
+                        }
+                      ]
+                    }
+                  },
+                  "overrides": []
+                },
+                "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 8
+                },
+                "id": 2,
+                "options": {
+                  "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom"
+                  },
+                  "tooltip": {
+                    "mode": "single"
+                  }
+                },
+                "targets": [
+                  {
+                    "exemplar": true,
+                    "expr": "http_server_requests_seconds_count{instance=\"http://second-service.default.svc\",job=\"second service\"}",
+                    "instant": false,
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "Total Requests"
+                  }
+                ],
+                "title": "Panel Title",
+                "type": "timeseries"
+              }
+            ],
+            "refresh": "",
+            "schemaVersion": 30,
+            "style": "dark",
+            "tags": [],
+            "templating": {
+              "list": []
+            },
+            "time": {
+              "from": "now-6h",
+              "to": "now"
+            },
+            "timepicker": {},
+            "timezone": "",
+            "title": "Second Service",
+            "uid": "dvTewnnnk",
+            "version": 3
+          }
