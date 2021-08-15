@@ -1,0 +1,41 @@
+micro-service-tmpl:
+
+  image:
+    repository: hello-service
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "0.0.1"
+  nameOverride: "hello-service"
+
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  env:
+    FOO: "BAR"
+  service:
+    type: NodePort
+    port: 8080
+
+  ingress:
+    enabled: false
+  containers:
+    livenessProbe: 
+      httpGet:
+        path: /actuator/health/liveness
+    readinessProbe: 
+      httpGet:
+        path: /actuator/health/readiness
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi

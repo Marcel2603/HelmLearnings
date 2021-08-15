@@ -1,0 +1,10 @@
+hello-service:
+  micro-service-tmpl:
+    env:
+      BAR2: foo
+      FOO: test
+      BAR: tester
+second-service:
+  micro-service-tmpl:
+    env:
+      Test1: "value-{{ tpl (.Release.Name) }}"
