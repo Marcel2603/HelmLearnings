@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: localstack-full-init-scripts-config
+data:
+  test.sh: |
+    #!/bin/bash
+    set -x
+    awslocal s3 mb s3://bucket
+    set +x

@@ -1,0 +1,18 @@
+localstack:
+  extraEnvVars: 
+    - name: SERVICES
+      value: "kms"
+    - name: LS_LOG
+      value: "ALL"
+    - name: KMS_SEED_PATH
+      value: "/init/seed.yaml"
+    - name: DOCKER_HOST
+      value: unix:///var/run/docker.sock
+  debug: true
+  enableStartupScripts: true
+  nameOverride: "localstack"
+  #fullnameOverride: "localstack-full"
+  seedKms: true
+  enableDockerDaemon: true
+  podSecurityContext:
+        fsGroup: 412
