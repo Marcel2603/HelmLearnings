@@ -1,0 +1,4 @@
+global:
+  url: "global.url"
+  db:
+    url: "db_url.test"

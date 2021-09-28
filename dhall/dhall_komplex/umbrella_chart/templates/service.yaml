@@ -22,7 +22,7 @@ items:
           - name: foo
             value: bar
           - name: global_url
-            value: "{{ .Values.global.url }}"
+            value: "{{ .Global.url }}"
           image: "alpine:3.14"
           imagePullPolicy: Always
           name: web
@@ -65,7 +65,7 @@ items:
           - name: db_url
             value: "{{ .Values.global.db.url }}"
           - name: global_url
-            value: "{{ .Values.global.url }}"
+            value: "{{ .Global.url }}"
           image: "alpine:3.14"
           imagePullPolicy: Always
           name: web

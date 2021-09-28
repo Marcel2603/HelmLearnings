@@ -1,0 +1,4 @@
+global:
+  url: ~
+  db:
+    url: ~

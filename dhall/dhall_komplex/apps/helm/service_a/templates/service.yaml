@@ -1,0 +1,15 @@
+---
+appPort: 80
+domain: ''
+envVars:
+- name: tester
+  value: tester
+- name: foo
+  value: bar
+- name: global_url
+  value: "{{ .Values.global.url }}"
+image: "alpine:3.14"
+leIssuer: staging
+name: Service A
+otherContainers: []
+replicas: 1
