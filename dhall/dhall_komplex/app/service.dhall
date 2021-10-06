@@ -6,7 +6,6 @@ let MicroService = ./microservice.dhall
 
 let selector = ./selector.dhall
 
-
 let selector = ./selector.dhall
 
 let spec
@@ -26,11 +25,8 @@ let service
     : MicroService.Type → kubernetes.Service.Type
     = λ(config : MicroService.Type) →
         kubernetes.Service::{
-        , metadata = kubernetes.ObjectMeta::{
-          , name = Some config.name
-          }
+        , metadata = kubernetes.ObjectMeta::{ name = Some config.name }
         , spec = Some (spec config)
         }
 
 in  service
-

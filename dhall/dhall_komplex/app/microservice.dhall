@@ -11,13 +11,13 @@ in  { Type =
         , otherContainers : List kubernetes.Container.Type
         }
     , default =
-        { name = "nginx"
-        , appPort = +80
-        , image = "nginx:1.21"
-        , domain = ""
-        , replicas = +1
-        , leIssuer = "staging"
-        , envVars = [] : List kubernetes.EnvVar.Type
-        , otherContainers = [] : List kubernetes.Container.Type
-        }
+      { name = "nginx"
+      , appPort = +80
+      , image = "nginx:1.21"
+      , domain = ""
+      , replicas = +1
+      , leIssuer = "staging"
+      , envVars = [] : List kubernetes.EnvVar.Type
+      , otherContainers = [] : List kubernetes.Container.Type
+      }
     }

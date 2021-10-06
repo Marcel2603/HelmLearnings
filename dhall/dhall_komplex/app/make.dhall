@@ -9,15 +9,16 @@ let service = ./service.dhall
 let typesUnion = ../lib/k8s/types_union.dhall
 
 let buildService =
-        λ(microservice : MicroService.Type)
-      → let myDeployment = deployment microservice
+      λ(microservice : MicroService.Type) →
+        let myDeployment = deployment microservice
+
         let myService = service microservice
 
         in  list::{
             , items =
-              [, typesUnion.Deployment myDeployment
+              [ typesUnion.Deployment myDeployment
               , typesUnion.Service myService
               ]
             }
 
-in  buildService 
+in  buildService
