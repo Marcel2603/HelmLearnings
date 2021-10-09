@@ -3,43 +3,43 @@ items:
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
-    name: Service A
-    namespace: apps
+    name: Service_A
+    namespace: "{{ .Release.Namespace }}"
   spec:
     replicas: 1
     selector:
       matchLabels:
-        name: Service A
+        name: Service_A
     template:
       metadata:
-        name: Service A
+        name: Service_A
       spec:
         containers:
         - env:
           - name: tester
-            value: tester
+            value: Tester
           - name: foo
             value: bar
-          - name: global_url
-            value: url
+          - name: db_url
+            value: local_url
           image: "alpine:3.14"
           imagePullPolicy: Always
-          name: web
+          name: "Service_A-container"
           ports:
-          - containerPort: 80
+          - containerPort: 8080
         imagePullSecrets:
         - name: regcred
 - apiVersion: v1
   kind: Service
   metadata:
-    name: Service A
+    name: Service_A
   spec:
     ports:
-    - port: 80
-      targetPort: 80
+    - port: 8080
+      targetPort: 8080
     type: ClusterIP
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
-    name: "RELEASE-NAME-Service A"
+    name: "{{ .Release.Name }}-Service_A"
 kind: List

@@ -4,13 +4,15 @@ let MicroService = ./microservice.dhall
 
 let selector = ./selector.dhall
 
+let helmUtils = ./../../lib/helm_utils.dhall
+
 let podSpec
     : MicroService.Type → kubernetes.PodSpec.Type
     = λ(MicroService : MicroService.Type) →
         let rootContainer =
               [ kubernetes.Container::{
-                , name = "web"
-                , env = Some MicroService.envVars
+                , name = "${MicroService.name}-container"
+                , env = MicroService.envVars
                 , image = Some MicroService.image
                 , imagePullPolicy = Some "Always"
                 , ports = Some
@@ -21,12 +23,8 @@ let podSpec
                 }
               ]
 
-        let other = MicroService.otherContainers
-
-        let combined = rootContainer # other
-
         in  kubernetes.PodSpec::{
-            , containers = combined
+            , containers = rootContainer
             , imagePullSecrets = Some
               [ kubernetes.LocalObjectReference::{ name = Some "regcred" } ]
             }
@@ -49,7 +47,7 @@ let deployment =
         kubernetes.Deployment::{
         , metadata = kubernetes.ObjectMeta::{
           , name = Some MicroService.name
-          , namespace = Some "apps"
+          , namespace = Some helmUtils.Release.namespace
           }
         , spec = Some (spec MicroService)
         }
