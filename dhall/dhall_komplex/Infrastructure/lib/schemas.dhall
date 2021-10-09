@@ -1,0 +1,1 @@
+{ list = ./schemas/list.dhall }
