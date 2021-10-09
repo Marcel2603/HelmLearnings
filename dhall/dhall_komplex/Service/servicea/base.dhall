@@ -4,7 +4,7 @@ let lib = ../../Infrastructure/lib/lib.dhall
 
 let typesUnion = ../../Infrastructure/lib/types_union.dhall
 
-let Config = { image : Text, tester : Text, foo : Text, db_url : Text }
+let Config = { image : Text, tag: Text, tester : Text, foo : Text, db_url : Text }
 
 let envVars =
       λ(config : Config) →
@@ -21,6 +21,7 @@ let createService =
         , name = "Service_A"
         , appPort = +8080
         , image = config.image
+        , tag = config.tag
         , replicas = +1
         , envVars = Some (envVars config).env
         }

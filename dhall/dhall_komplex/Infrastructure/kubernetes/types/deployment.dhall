@@ -13,7 +13,7 @@ let podSpec
               [ kubernetes.Container::{
                 , name = "${MicroService.name}-container"
                 , env = MicroService.envVars
-                , image = Some MicroService.image
+                , image = Some "${MicroService.image}:${MicroService.tag}"
                 , imagePullPolicy = Some "Always"
                 , ports = Some
                   [ kubernetes.ContainerPort::{

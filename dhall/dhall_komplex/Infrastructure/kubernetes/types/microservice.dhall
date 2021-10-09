@@ -4,6 +4,7 @@ in  { Type =
         { name : Text
         , appPort : Integer
         , image : Text
+        , tag: Text
         , replicas : Integer
         , envVars : Optional (List kubernetes.EnvVar.Type)
         }
