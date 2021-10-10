@@ -13,15 +13,20 @@ let spec
           [ kubernetes.ServicePort::{
             , targetPort = Some (kubernetes.IntOrString.Int config.appPort)
             , port = config.appPort
+            , name = Some "http"
             }
           ]
+        , selector = Some (toMap { app = config.name })
         }
 
 let service
     : MicroService.Type → kubernetes.Service.Type
     = λ(config : MicroService.Type) →
         kubernetes.Service::{
-        , metadata = kubernetes.ObjectMeta::{ name = Some config.name }
+        , metadata = kubernetes.ObjectMeta::{
+          , name = Some config.name
+          , labels = Some (toMap { app = config.name })
+          }
         , spec = Some (spec config)
         }
 

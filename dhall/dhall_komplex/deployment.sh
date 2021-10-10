@@ -8,8 +8,8 @@ print_help() {
     echo
     echo "Syntax: deployment [-1|-2|-s|h]"
     echo "options:"
-    echo "a     ImageTag for Service A"
-    echo "b     ImageTag for Service B"
+    echo "a     ImageTag for Hello Service"
+    echo "b     ImageTag for Second Service"
     echo "s     Stage to deploy"
     echo "h     Print this Help."
     echo
@@ -21,7 +21,7 @@ deploy_service() {
     stage=$2
     tag=$3
     TAG=$tag dhall-to-yaml-ng --file "${dir}/${stage}.dhall" --output "${dir}/templates/service.yml"
-    helm upgrade -i "${service}" --dry-run $dir
+    helm upgrade -i "test-release-${service}" $dir
 }
 
 while getopts ":a:b:s:h" option; do
@@ -30,22 +30,24 @@ while getopts ":a:b:s:h" option; do
             stage=${OPTARG}
             ;;
         a)
-            service_a_tag=${OPTARG}
+            hello_service_tag=${OPTARG}
             ;;
         b)
-            service_b_tag=${OPTARG}
+            second_service_tag=${OPTARG}
             ;;
         h)
             print_help
+            exit 0
             ;;
         *)
+            print_help
+            exit 0
             ;;
     esac
 done
 
 
 [[ -z "$stage" ]] && echo "Stage is empty using local" && stage=local
-echo "${stage}, ${service_a_tag}, ${service_b_tag}"
-[[ ! -z "$service_a_tag" ]] && deploy_service "servicea" $stage "$service_a_tag"
-[[ ! -z "$service_b_tag" ]] && deploy_service "serviceb" $stage "$service_b_tag"
+[[ ! -z "$hello_service_tag" ]] && deploy_service "hello-service" $stage "$hello_service_tag"
+[[ ! -z "$second_service_tag" ]] && deploy_service "second-service" $stage "$second_service_tag"
 

@@ -3,43 +3,53 @@ items:
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
-    name: Service_B
+    labels:
+      app: "hello-service"
+    name: "hello-service"
     namespace: "{{ .Release.Namespace }}"
   spec:
     replicas: 1
     selector:
       matchLabels:
-        name: Service_B
+        app: "hello-service"
     template:
       metadata:
-        name: Service_B
+        labels:
+          app: "hello-service"
+        name: "hello-service"
       spec:
         containers:
         - env:
           - name: tester
-            value: B
+            value: Tester
           - name: foo
-            value: Foo
+            value: bar
           - name: db_url
             value: local_url
-          image: "alpine:latest"
-          imagePullPolicy: Always
-          name: "Service_B-container"
+          image: "hello-service:1.0.0"
+          imagePullPolicy: IfNotPresent
+          name: "hello-service-container"
           ports:
           - containerPort: 8080
+            name: http
         imagePullSecrets:
         - name: regcred
 - apiVersion: v1
   kind: Service
   metadata:
-    name: Service_B
+    labels:
+      app: "hello-service"
+    name: "hello-service"
   spec:
     ports:
-    - port: 8080
+    - name: http
+      port: 8080
       targetPort: 8080
+    selector:
+      app: "hello-service"
     type: ClusterIP
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
-    name: "{{ .Release.Name }}-Service_B"
+    name: "{{ .Release.Name }}-hello-service"
 kind: List

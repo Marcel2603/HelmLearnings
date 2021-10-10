@@ -4,14 +4,13 @@ let lib = ../../Infrastructure/lib/lib.dhall
 
 let typesUnion = ../../Infrastructure/lib/types_union.dhall
 
-let Config =
-      { image : Text, tag : Text, tester : Text, foo : Text, db_url : Text }
+let Config = { image : Text, tag: Text, pullPolicy: Text, tester : Text, foo : Text, db_url : Text }
 
 let envVars =
       λ(config : Config) →
         { env =
           [ infra.makeEnv { name = "tester", value = config.tester }
-          , infra.makeEnv { name = "foo", value = config.foo }
+          , infra.makeEnv { name = "foo", value = "bar" }
           , infra.makeEnv { name = "db_url", value = config.db_url }
           ]
         }
@@ -19,7 +18,7 @@ let envVars =
 let createService =
       λ(config : Config) →
         infra.microservice::{
-        , name = "Service_B"
+        , name = "hello-service"
         , appPort = +8080
         , image = config.image
         , tag = config.tag

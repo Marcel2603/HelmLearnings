@@ -3,43 +3,53 @@ items:
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
-    name: Service_A
+    labels:
+      app: "second-service"
+    name: "second-service"
     namespace: "{{ .Release.Namespace }}"
   spec:
     replicas: 1
     selector:
       matchLabels:
-        name: Service_A
+        app: "second-service"
     template:
       metadata:
-        name: Service_A
+        labels:
+          app: "second-service"
+        name: "second-service"
       spec:
         containers:
         - env:
           - name: tester
-            value: Tester
+            value: B
           - name: foo
-            value: bar
+            value: Foo
           - name: db_url
             value: local_url
-          image: "alpine:3.14"
-          imagePullPolicy: Always
-          name: "Service_A-container"
+          image: "second-service:1.0.0"
+          imagePullPolicy: IfNotPresent
+          name: "second-service-container"
           ports:
           - containerPort: 8080
+            name: http
         imagePullSecrets:
         - name: regcred
 - apiVersion: v1
   kind: Service
   metadata:
-    name: Service_A
+    labels:
+      app: "second-service"
+    name: "second-service"
   spec:
     ports:
-    - port: 8080
+    - name: http
+      port: 8080
       targetPort: 8080
+    selector:
+      app: "second-service"
     type: ClusterIP
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
-    name: "{{ .Release.Name }}-Service_A"
+    name: "{{ .Release.Name }}-second-service"
 kind: List

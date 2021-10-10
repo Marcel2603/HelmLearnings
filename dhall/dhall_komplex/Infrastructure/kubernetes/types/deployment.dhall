@@ -14,9 +14,10 @@ let podSpec
                 , name = "${MicroService.name}-container"
                 , env = MicroService.envVars
                 , image = Some "${MicroService.image}:${MicroService.tag}"
-                , imagePullPolicy = Some "Always"
+                , imagePullPolicy = Some MicroService.pullPolicy
                 , ports = Some
                   [ kubernetes.ContainerPort::{
+                    , name = Some "http"
                     , containerPort = MicroService.appPort
                     }
                   ]
@@ -37,6 +38,7 @@ let spec =
         , template = kubernetes.PodTemplateSpec::{
           , metadata = Some kubernetes.ObjectMeta::{
             , name = Some MicroService.name
+            , labels = Some (toMap { app = MicroService.name })
             }
           , spec = Some (podSpec MicroService)
           }
@@ -48,6 +50,7 @@ let deployment =
         , metadata = kubernetes.ObjectMeta::{
           , name = Some MicroService.name
           , namespace = Some helmUtils.Release.namespace
+          , labels = Some (toMap { app = MicroService.name })
           }
         , spec = Some (spec MicroService)
         }
