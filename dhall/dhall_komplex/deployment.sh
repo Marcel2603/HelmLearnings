@@ -10,6 +10,7 @@ print_help() {
     echo "options:"
     echo "a     ImageTag for Hello Service"
     echo "b     ImageTag for Second Service"
+    echo "d     ImageTag for Devops Service"
     echo "s     Stage to deploy"
     echo "h     Print this Help."
     echo
@@ -24,7 +25,7 @@ deploy_service() {
     helm upgrade -i "test-release-${service}" $dir
 }
 
-while getopts ":a:b:s:h" option; do
+while getopts ":a:b:d:s:h" option; do
     case "${option}" in
         s)
             stage=${OPTARG}
@@ -34,6 +35,9 @@ while getopts ":a:b:s:h" option; do
             ;;
         b)
             second_service_tag=${OPTARG}
+            ;;
+        d)
+            devops_service_tag=${OPTARG}
             ;;
         h)
             print_help
@@ -50,4 +54,6 @@ done
 [[ -z "$stage" ]] && echo "Stage is empty using local" && stage=local
 [[ ! -z "$hello_service_tag" ]] && deploy_service "hello-service" $stage "$hello_service_tag"
 [[ ! -z "$second_service_tag" ]] && deploy_service "second-service" $stage "$second_service_tag"
+[[ ! -z "$devops_service_tag" ]] && deploy_service "devops-service" $stage "$devops_service_tag"
+
 

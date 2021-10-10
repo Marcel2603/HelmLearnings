@@ -18,13 +18,11 @@ build_container_and_upload() {
     dir=$2
     tag=$3
     image="$name:$tag"
-    mvn clean package -DskipTests -f $dir
+    run_maven=$4
+    [[ $4 == true ]] && mvn clean package -DskipTests -f $dir
     docker build $dir -t $image
     upload_docker_image $image
 }
-
-HELLO_SERVICE="../../../K8sLearning/hello-service"
-SECOND_SERVICE="../../../K8sLearning/second-service"
 
 install_kind() {
     echo "Kind is not installed. Should i install it? (y/n)"
@@ -46,9 +44,13 @@ check_kind() {
 upload_services() {
     check_kind
     version=${1:-1.0.0}
-    build_container_and_upload "hello-service" $HELLO_SERVICE $version
-    build_container_and_upload "second-service" $SECOND_SERVICE $version
+    build_container_and_upload "hello-service" $HELLO_SERVICE $version true
+    build_container_and_upload "second-service" $SECOND_SERVICE $version true
+    build_container_and_upload "devops-service" $DEVOPS_SERVICE $version false
 
 }
 
+HELLO_SERVICE="../services/hello-service"
+SECOND_SERVICE="../services/second-service"
+DEVOPS_SERVICE="../services/devops-service"
 "$@"

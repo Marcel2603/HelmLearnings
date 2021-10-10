@@ -1,0 +1,4 @@
+app:
+  access: ${access:foobar}
+  secret: ${secret:foobar}
+  endpoint: ${s3}

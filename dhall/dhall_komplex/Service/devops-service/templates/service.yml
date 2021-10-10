@@ -1,0 +1,47 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: "devops-service"
+    name: "devops-service"
+    namespace: "{{ .Release.Namespace }}"
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: "devops-service"
+    template:
+      metadata:
+        labels:
+          app: "devops-service"
+        name: "devops-service"
+      spec:
+        containers:
+        - env:
+          - name: AWS_ACCESS_KEY_ID
+            value: Foo
+          - name: AWS_SECRET_ACCESS_KEY
+            value: Bar
+          - name: AWS_DEFAULT_REGION
+            value: "eu-central-1"
+          - name: S3_BUCKET
+            value: "my-bucket"
+          - name: PGHOST
+            value: localhost
+          - name: PGUSER
+            value: root
+          - name: PGPASSWORD
+            value: root
+          - name: PAGER
+            value: "pspg -s 5"
+          image: "devops-service:1.0.0"
+          imagePullPolicy: IfNotPresent
+          name: "devops-service-container"
+          ports:
+          - containerPort: 80
+            name: http
+        imagePullSecrets:
+        - name: regcred
+kind: List
