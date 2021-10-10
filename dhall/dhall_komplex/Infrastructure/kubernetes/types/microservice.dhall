@@ -7,10 +7,12 @@ in  { Type =
         , tag : Text
         , pullPolicy : Text
         , replicas : Integer
+        , domain : Optional Text
         , envVars : Optional (List kubernetes.EnvVar.Type)
         }
     , default =
       { pullPolicy = "IfNotPresent"
+      , domain = None Text
       , envVars = None (List kubernetes.EnvVar.Type)
       }
     }

@@ -8,6 +8,7 @@ let Config =
       { image : Text
       , tag : Text
       , pullPolicy : Text
+      , domain : Text
       , tester : Text
       , foo : Text
       , db_url : Text
@@ -30,6 +31,7 @@ let createService =
         , image = config.image
         , tag = config.tag
         , replicas = +1
+        , domain = Some config.domain
         , envVars = Some (envVars config).env
         }
 
@@ -43,11 +45,14 @@ let buildService =
 
         let myServiceAccount = infra.serviceAccount microservice
 
+        let myIngress = infra.ingress microservice
+
         in  lib.list::{
             , items = Some
               [ typesUnion.Deployment myDeployment
               , typesUnion.Service myService
               , typesUnion.ServiceAccount myServiceAccount
+              , typesUnion.Ingress myIngress
               ]
             }
 
