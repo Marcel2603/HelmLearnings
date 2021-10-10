@@ -5,7 +5,13 @@ let lib = ../../Infrastructure/lib/lib.dhall
 let typesUnion = ../../Infrastructure/lib/types_union.dhall
 
 let Config =
-      { image : Text, tag : Text, pullPolicy: Text, tester : Text, foo : Text, db_url : Text }
+      { image : Text
+      , tag : Text
+      , pullPolicy : Text
+      , tester : Text
+      , foo : Text
+      , db_url : Text
+      }
 
 let envVars =
       λ(config : Config) →
