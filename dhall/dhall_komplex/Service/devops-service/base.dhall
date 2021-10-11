@@ -4,6 +4,8 @@ let lib = ../../Infrastructure/lib/lib.dhall
 
 let typesUnion = ../../Infrastructure/lib/types_union.dhall
 
+let k8sTypesUnion = ./../../Infrastructure/lib/k8sTypesUnion.dhall
+
 let Config =
       { image : Text
       , tag : Text
@@ -50,6 +52,9 @@ let buildService =
 
         let myDeployment = infra.deployment microservice
 
-        in  lib.list::{ items = Some [ typesUnion.Deployment myDeployment ] }
+        in  lib.list::{
+            , items = Some
+              [ typesUnion.k8s (k8sTypesUnion.Deployment myDeployment) ]
+            }
 
 in  buildService

@@ -1,0 +1,1 @@
+{ stringDataFrom : ./SecretsManagerSecretRef.dhall }
