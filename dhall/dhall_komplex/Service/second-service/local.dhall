@@ -1,8 +1,8 @@
 let base = ./base.dhall
 
 let service =
-      { image = "second-service"
-      , tag = env:TAG as Text ? "1.0.0"
+      { image = "alpine"
+      , tag = env:TAG as Text ? "3.15"
       , pullPolicy = "IfNotPresent"
       , tester = "B"
       , foo = "Foo"

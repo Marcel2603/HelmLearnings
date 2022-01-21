@@ -6,6 +6,8 @@ let typesUnion = ../../Infrastructure/lib/types_union.dhall
 
 let k8sTypesUnion = ./../../Infrastructure/lib/k8sTypesUnion.dhall
 
+let k8s = ./../../Infrastructure/lib/k8s.dhall
+
 let Config =
       { image : Text
       , tag : Text
@@ -14,6 +16,14 @@ let Config =
       , foo : Text
       , db_url : Text
       }
+
+let secret = k8s.Secret::{
+  metadata = k8s.ObjectMeta::{
+    name = Some "testsecret"
+  }
+  , data = Some (toMap {test = "VGVzdAo="})
+
+}
 
 let envVars =
       λ(config : Config) →
@@ -50,6 +60,7 @@ let buildService =
               [ typesUnion.k8s (k8sTypesUnion.Deployment myDeployment)
               , typesUnion.k8s (k8sTypesUnion.Service myService)
               , typesUnion.k8s (k8sTypesUnion.ServiceAccount myServiceAccount)
+              , typesUnion.k8s (k8sTypesUnion.Secret secret)
               ]
             }
 

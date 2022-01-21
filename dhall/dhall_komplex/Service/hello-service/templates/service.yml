@@ -23,9 +23,12 @@ items:
           - name: tester
             value: Tester
           - name: foo
-            value: bar
+            value: "{{ now | unixEpoch }}"
           - name: db_url
             value: local_url
+          envFrom:
+          - secretRef:
+              name: testsecret
           image: "hello-service:1.0.0"
           imagePullPolicy: IfNotPresent
           name: "hello-service-container"

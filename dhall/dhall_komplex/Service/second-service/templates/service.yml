@@ -26,7 +26,10 @@ items:
             value: Foo
           - name: db_url
             value: local_url
-          image: "second-service:1.0.0"
+          envFrom:
+          - secretRef:
+              name: testsecret
+          image: "alpine:3.15"
           imagePullPolicy: IfNotPresent
           name: "second-service-container"
           ports:
@@ -52,4 +55,12 @@ items:
   kind: ServiceAccount
   metadata:
     name: "{{ .Release.Name }}-second-service"
+- apiVersion: v1
+  data:
+    username: YWRtaW4=
+    password: MWYyZDFlMmU2N2Rm
+  type: Opaque
+  kind: Secret
+  metadata:
+    name: testsecret
 kind: List

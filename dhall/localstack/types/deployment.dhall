@@ -1,10 +1,10 @@
-let kubernetes = ./../../lib/k8s.dhall
+let kubernetes = ./../lib/k8s.dhall
 
 let MicroService = ./microservice.dhall
 
 let selector = ./selector.dhall
 
-let helmUtils = ./../../lib/helm_utils.dhall
+let helmUtils = ./../lib/helm_utils.dhall
 
 let podSpec
     : MicroService.Type → kubernetes.PodSpec.Type
@@ -15,13 +15,6 @@ let podSpec
                 , env = MicroService.envVars
                 , image = Some "${MicroService.image}:${MicroService.tag}"
                 , imagePullPolicy = Some MicroService.pullPolicy
-                , envFrom = Some [
-                  kubernetes.EnvFromSource::{
-                    secretRef = Some kubernetes.SecretEnvSource::{
-                      name = Some "testsecret"
-                    }
-                  }
-                ]
                 , ports = Some
                   [ kubernetes.ContainerPort::{
                     , name = Some "http"

@@ -20,7 +20,7 @@ let envVars =
       λ(config : Config) →
         { env =
           [ infra.makeEnv { name = "tester", value = config.tester }
-          , infra.makeEnv { name = "foo", value = "bar" }
+          , infra.makeEnv { name = "foo", value = "{{ now | unixEpoch }}" }
           , infra.makeEnv { name = "db_url", value = config.db_url }
           ]
         }
