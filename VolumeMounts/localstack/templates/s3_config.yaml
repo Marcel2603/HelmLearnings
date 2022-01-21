@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: localstack-full-init-scripts-config
+  name: localstack-init-scripts-config
 data:
   test.sh: |
     #!/bin/bash

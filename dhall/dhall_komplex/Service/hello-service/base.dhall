@@ -19,17 +19,20 @@ let Config =
 let envVars =
       λ(config : Config) →
         { env =
-          [ infra.makeEnv { name = "tester", value = config.tester }
-          , infra.makeEnv { name = "foo", value = "{{ now | unixEpoch }}" }
-          , infra.makeEnv { name = "db_url", value = config.db_url }
+          [ infra.makeEnv
+              { name = "LOCALSTACK_URL"
+              , value = "http://localstack.default.svc:4566"
+              }
+          , infra.makeEnv { name = "S3_BUCKET", value = "bucket" }
+          , infra.makeEnv { name = "SPRING_PROFILES_ACTIVE", value = "compose" }
           ]
         }
 
 let createService =
       λ(config : Config) →
         infra.microservice::{
-        , name = "hello-service"
-        , appPort = +8080
+        , name = "reactive-s3-server"
+        , appPort = +9000
         , image = config.image
         , tag = config.tag
         , replicas = +1

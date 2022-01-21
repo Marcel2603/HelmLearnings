@@ -15,13 +15,6 @@ let podSpec
                 , env = MicroService.envVars
                 , image = Some "${MicroService.image}:${MicroService.tag}"
                 , imagePullPolicy = Some MicroService.pullPolicy
-                , envFrom = Some [
-                  kubernetes.EnvFromSource::{
-                    secretRef = Some kubernetes.SecretEnvSource::{
-                      name = Some "testsecret"
-                    }
-                  }
-                ]
                 , ports = Some
                   [ kubernetes.ContainerPort::{
                     , name = Some "http"
@@ -33,8 +26,6 @@ let podSpec
 
         in  kubernetes.PodSpec::{
             , containers = rootContainer
-            , imagePullSecrets = Some
-              [ kubernetes.LocalObjectReference::{ name = Some "regcred" } ]
             }
 
 let spec =

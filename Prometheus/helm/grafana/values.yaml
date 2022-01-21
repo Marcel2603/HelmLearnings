@@ -10,6 +10,10 @@ grafana:
         isDefault: true
   adminUser: admin
   adminPassword: password
+  ingress:
+    enabled: true
+    path: /
+    hosts: ["grafana.localhost"]
   dashboardProviders:
     dashboardproviders.yaml:
       apiVersion: 1
@@ -46,14 +50,13 @@ grafana:
                 }
               ]
             },
-            "editable": false,
-            "gnetId": null,
+            "editable": true,
+            "fiscalYearStartMonth": 0,
             "graphTooltip": 0,
-            "id": 1,
             "links": [],
+            "liveNow": false,
             "panels": [
               {
-                "datasource": null,
                 "fieldConfig": {
                   "defaults": {
                     "color": {
@@ -123,26 +126,130 @@ grafana:
                 },
                 "targets": [
                   {
+                    "datasource": {
+                      "type": "prometheus",
+                      "uid": "PBFA97CFB590B2093"
+                    },
                     "exemplar": true,
                     "expr": "system_cpu_usage{instance=\"http://second-service.default.svc\",job=\"second service\"}",
                     "interval": "",
                     "legendFormat": "",
                     "refId": "CPU"
-                  },
-                  {
-                    "exemplar": true,
-                    "expr": "up{instance=\"http://second-service.default.svc\",job=\"second service\"}",
-                    "hide": false,
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
                   }
                 ],
                 "title": "Panel Title",
                 "type": "timeseries"
               },
               {
-                "datasource": null,
+                "description": "",
+                "fieldConfig": {
+                  "defaults": {
+                    "color": {
+                      "mode": "palette-classic"
+                    },
+                    "custom": {
+                      "axisLabel": "",
+                      "axisPlacement": "auto",
+                      "barAlignment": 0,
+                      "drawStyle": "line",
+                      "fillOpacity": 0,
+                      "gradientMode": "none",
+                      "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                      },
+                      "lineInterpolation": "linear",
+                      "lineWidth": 1,
+                      "pointSize": 5,
+                      "scaleDistribution": {
+                        "type": "linear"
+                      },
+                      "showPoints": "auto",
+                      "spanNulls": false,
+                      "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                      },
+                      "thresholdsStyle": {
+                        "mode": "off"
+                      }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "green",
+                          "value": null
+                        },
+                        {
+                          "color": "red",
+                          "value": 80
+                        }
+                      ]
+                    }
+                  },
+                  "overrides": []
+                },
+                "gridPos": {
+                  "h": 8,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+                },
+                "id": 5,
+                "options": {
+                  "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom"
+                  },
+                  "tooltip": {
+                    "mode": "single"
+                  }
+                },
+                "targets": [
+                  {
+                    "datasource": {
+                      "type": "prometheus",
+                      "uid": "PBFA97CFB590B2093"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(jvm_memory_max_bytes{instance=\"http://second-service.default.svc\"})/1000000",
+                    "interval": "",
+                    "legendFormat": "Max memory",
+                    "refId": "Max Memory"
+                  },
+                  {
+                    "datasource": {
+                      "type": "prometheus",
+                      "uid": "PBFA97CFB590B2093"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(jvm_memory_used_bytes{instance=\"http://second-service.default.svc\"})/1000000",
+                    "hide": false,
+                    "interval": "",
+                    "legendFormat": "Memory used",
+                    "refId": "Used Memory"
+                  },
+                  {
+                    "datasource": {
+                      "type": "prometheus",
+                      "uid": "PBFA97CFB590B2093"
+                    },
+                    "exemplar": true,
+                    "expr": "sum(jvm_memory_committed_bytes{instance=\"http://second-service.default.svc\"})/1000000",
+                    "hide": false,
+                    "interval": "",
+                    "legendFormat": "Memory commited",
+                    "refId": "Commited Memory"
+                  }
+                ],
+                "title": "Memory",
+                "type": "timeseries"
+              },
+              {
                 "fieldConfig": {
                   "defaults": {
                     "color": {
@@ -225,7 +332,7 @@ grafana:
               }
             ],
             "refresh": "",
-            "schemaVersion": 30,
+            "schemaVersion": 34,
             "style": "dark",
             "tags": [],
             "templating": {
@@ -239,5 +346,6 @@ grafana:
             "timezone": "",
             "title": "Second Service",
             "uid": "dvTewnnnk",
-            "version": 3
+            "version": 1,
+            "weekStart": ""
           }

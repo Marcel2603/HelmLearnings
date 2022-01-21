@@ -1,14 +1,19 @@
 prometheus:
+  server:
+    ingress:
+      enabled: true
+      hosts:
+        - prometheus.localhost
   extraScrapeConfigs: |
-   - job_name: 'second service'
-     metrics_path: /actuator/prometheus
-     static_configs:
-       - targets:
-         - http://second-service.default.svc
-     relabel_configs:
-       - source_labels: [__address__]
-         target_label: __param_target
-       - source_labels: [__param_target]
-         target_label: instance
-       - target_label: __address__
-         replacement: second-service.default.svc:8080
+    - job_name: 'second service'
+      metrics_path: /actuator/prometheus
+      static_configs:
+        - targets:
+          - http://second-service.default.svc
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: second-service.default.svc:8080

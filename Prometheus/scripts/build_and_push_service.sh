@@ -6,8 +6,8 @@ if [[ "$PWD" != *"/scripts" ]]; then echo -e "You are not in /scripts. Pls navig
 
 mvn clean package -DskipTests -f ../second-service
 
-# Set docker env
-eval "$(minikube docker-env)"             # unix shells
-
 # Build image
 docker build -t second-service:0.0.1 ../second-service
+
+# load image
+kind load docker-image second-service:0.0.1

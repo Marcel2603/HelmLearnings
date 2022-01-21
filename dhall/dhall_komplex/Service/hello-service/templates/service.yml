@@ -4,74 +4,69 @@ items:
   kind: Deployment
   metadata:
     labels:
-      app: "hello-service"
-    name: "hello-service"
+      app: "reactive-s3-server"
+    name: "reactive-s3-server"
     namespace: "{{ .Release.Namespace }}"
   spec:
     replicas: 1
     selector:
       matchLabels:
-        app: "hello-service"
+        app: "reactive-s3-server"
     template:
       metadata:
         labels:
-          app: "hello-service"
-        name: "hello-service"
+          app: "reactive-s3-server"
+        name: "reactive-s3-server"
       spec:
         containers:
         - env:
-          - name: tester
-            value: Tester
-          - name: foo
-            value: "{{ now | unixEpoch }}"
-          - name: db_url
-            value: local_url
-          envFrom:
-          - secretRef:
-              name: testsecret
-          image: "hello-service:1.0.0"
+          - name: LOCALSTACK_URL
+            value: "http://localstack.default.svc:4566"
+          - name: S3_BUCKET
+            value: bucket
+          - name: SPRING_PROFILES_ACTIVE
+            value: compose
+          image: "reactive-file-server:1.0"
           imagePullPolicy: IfNotPresent
-          name: "hello-service-container"
+          name: "reactive-s3-server-container"
           ports:
-          - containerPort: 8080
+          - containerPort: 9000
             name: http
-        imagePullSecrets:
-        - name: regcred
 - apiVersion: v1
   kind: Service
   metadata:
     labels:
-      app: "hello-service"
-    name: "hello-service"
+      app: "reactive-s3-server"
+    name: "reactive-s3-server"
   spec:
     ports:
     - name: http
-      port: 8080
-      targetPort: 8080
+      port: 9000
+      targetPort: 9000
     selector:
-      app: "hello-service"
+      app: "reactive-s3-server"
     type: ClusterIP
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
-    name: "{{ .Release.Name }}-hello-service"
+    name: "{{ .Release.Name }}-reactive-s3-server"
 - apiVersion: networking.k8s.io/v1
   kind: Ingress
   metadata:
     labels:
-      app: "hello-service"
-    name: "hello-service"
+      app: "reactive-s3-server"
+    name: "reactive-s3-server"
     namespace: "{{ .Release.Namespace }}"
   spec:
     rules:
-    - host: "hello-service.test.de"
+    - host: "reactive-server.localhost"
       http:
         paths:
         - backend:
             service:
-              name: "hello-service"
+              name: "reactive-s3-server"
               port:
-                number: 8080
+                number: 9000
           path: "/*"
           pathType: Prefix
 kind: List

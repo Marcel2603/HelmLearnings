@@ -1,7 +1,7 @@
 localstack:
-  extraEnvVars: 
+  extraEnvVars:
     - name: SERVICES
-      value: "kms"
+      value: "s3"
     - name: LS_LOG
       value: "ALL"
     - name: KMS_SEED_PATH
@@ -12,7 +12,22 @@ localstack:
   enableStartupScripts: true
   nameOverride: "localstack"
   #fullnameOverride: "localstack-full"
-  seedKms: true
+  seedKms: false
   enableDockerDaemon: true
   podSecurityContext:
-        fsGroup: 412
+    fsGroup: 412
+  ingress:
+    enabled: true
+    hosts:
+      - host: "*.localstack.localhost"
+        paths:
+          - path: /
+            backend:
+              serviceName: localstack
+              servicePort: 4566
+      - host: "localstack.localhost"
+        paths:
+          - path: /
+            backend:
+              serviceName: localstack
+              servicePort: 4566
