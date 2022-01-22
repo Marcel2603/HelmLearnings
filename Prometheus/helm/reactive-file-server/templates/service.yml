@@ -68,6 +68,6 @@ items:
               name: "reactive-server"
               port:
                 number: 9000
-          path: "/*"
+          path: /
           pathType: Prefix
 kind: List

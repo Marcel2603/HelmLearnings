@@ -22,7 +22,7 @@ let rule
           , paths =
             [ kubernetes.HTTPIngressPath::{
               , pathType = "Prefix"
-              , path = Some "/*"
+              , path = Some "/"
               , backend = kubernetes.IngressBackend::{
                 , service = Some kubernetes.IngressServiceBackend::{
                   , name = microservice.name

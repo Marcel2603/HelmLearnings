@@ -4,11 +4,11 @@ REACTIVE_S3_FOLDER="../../../../Java/Reactive-S3"
 
 function create_cluster() {
   if [[ $(kind get clusters) ]]; then echo "Stop kind" && exit 1; fi
-  kind create cluster --config config/kind_config.yaml
+  kind create cluster --config config/kind_config.yaml  && sleep 20
 }
 
 function deploy_ingress_controller() {
-  kubectl apply -f "config/ingress.yaml" && sleep 10
+  kubectl apply -f "config/ingress.yaml"
   kubectl wait --namespace ingress-nginx \
     --for=condition=ready pod \
     --selector=app.kubernetes.io/component=controller \
@@ -20,6 +20,7 @@ function start() {
   deploy_ingress_controller
   create_monitoring
   create_localstack
+  deploy_services
 }
 
 function create_monitoring() {

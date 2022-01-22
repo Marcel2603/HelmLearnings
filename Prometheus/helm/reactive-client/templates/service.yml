@@ -66,6 +66,6 @@ items:
               name: "reactive-client"
               port:
                 number: 9001
-          path: "/*"
+          path: /
           pathType: Prefix
 kind: List
