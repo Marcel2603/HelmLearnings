@@ -36,7 +36,7 @@ let spec =
         , template = kubernetes.PodTemplateSpec::{
           , metadata = Some kubernetes.ObjectMeta::{
             , name = Some MicroService.name
-            , labels = Some (toMap { app = MicroService.name })
+            , labels = Some (toMap { app = MicroService.name , time = "{{ now | unixEpoch }}"})
             }
           , spec = Some (podSpec MicroService)
           }
