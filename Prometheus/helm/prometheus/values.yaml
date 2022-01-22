@@ -5,15 +5,39 @@ prometheus:
       hosts:
         - prometheus.localhost
   extraScrapeConfigs: |
-    - job_name: 'second service'
-      metrics_path: /actuator/prometheus
+    - job_name: 'reactive_server'
+      metrics_path: /prometheus
       static_configs:
         - targets:
-          - http://second-service.default.svc
+          - http://reactive-server.default.svc
       relabel_configs:
         - source_labels: [__address__]
           target_label: __param_target
         - source_labels: [__param_target]
           target_label: instance
         - target_label: __address__
-          replacement: second-service.default.svc:8080
+          replacement: reactive-server.default.svc:9000
+    - job_name: 'reactive_client'
+      metrics_path: /prometheus
+      static_configs:
+        - targets:
+          - http://reactive-client.default.svc
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: reactive-client.default.svc:9001
+    - job_name: 'localstack'
+      metrics_path: /health
+      static_configs:
+        - targets:
+          - http://localstack.default.svc
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: localstack.default.svc:4566

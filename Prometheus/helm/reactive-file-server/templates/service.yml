@@ -1,0 +1,72 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: "reactive-server"
+    name: "reactive-server"
+    namespace: "{{ .Release.Namespace }}"
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: "reactive-server"
+    template:
+      metadata:
+        labels:
+          app: "reactive-server"
+        name: "reactive-server"
+      spec:
+        containers:
+        - env:
+          - name: LOCALSTACK_URL
+            value: "http://localstack.default.svc:4566"
+          - name: S3_BUCKET
+            value: bucket
+          - name: SPRING_PROFILES_ACTIVE
+            value: compose
+          image: "reactive-server:1.0"
+          imagePullPolicy: IfNotPresent
+          name: "reactive-server-container"
+          ports:
+          - containerPort: 9000
+            name: http
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: "reactive-server"
+    name: "reactive-server"
+  spec:
+    ports:
+    - name: http
+      port: 9000
+      targetPort: 9000
+    selector:
+      app: "reactive-server"
+    type: ClusterIP
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: "{{ .Release.Name }}-reactive-server"
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    labels:
+      app: "reactive-server"
+    name: "reactive-server"
+    namespace: "{{ .Release.Namespace }}"
+  spec:
+    rules:
+    - host: "reactive-server.localhost"
+      http:
+        paths:
+        - backend:
+            service:
+              name: "reactive-server"
+              port:
+                number: 9000
+          path: "/*"
+          pathType: Prefix
+kind: List
