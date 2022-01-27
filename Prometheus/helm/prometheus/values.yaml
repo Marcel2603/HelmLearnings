@@ -1,5 +1,15 @@
 prometheus:
   server:
+    global:
+      ## How frequently to scrape targets by default
+      ##
+      scrape_interval: 5s
+      ## How long until a scrape request times out
+      ##
+      scrape_timeout: 2s
+      ## How frequently to evaluate rules
+      ##
+      evaluation_interval: 5s
     ingress:
       enabled: true
       hosts:
