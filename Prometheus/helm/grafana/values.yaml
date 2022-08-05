@@ -8,6 +8,12 @@ grafana:
         url: http://prometheus-server.monitoring.svc
         access: proxy
         isDefault: true
+      - name: Loki
+        type: loki
+        url: http://loki.monitoring.svc
+        access: proxy
+        isDefault: false
+
   adminUser: admin
   adminPassword: password
   ingress:

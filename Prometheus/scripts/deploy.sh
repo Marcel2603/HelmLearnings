@@ -21,6 +21,12 @@ case "$1" in
 "install-grafana")
     deploy_service "grafana" "monitoring"
     ;;
+"install-promtail")
+    deploy_service "promtail" "monitoring"
+    ;;
+"install-loki")
+    deploy_service "loki" "monitoring"
+    ;;
 *)
     echo "Pls give an parameter"
 esac

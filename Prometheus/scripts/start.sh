@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REACTIVE_S3_FOLDER="../../../JavaLearnings/Reactive-S3"
+REACTIVE_S3_FOLDER="../../../../JavaLearnings/Reactive-S3"
 
 function create_cluster() {
   if [[ $(kind get clusters) ]]; then echo "Stop kind" && exit 1; fi
@@ -16,15 +16,18 @@ function deploy_ingress_controller() {
 }
 
 function start() {
+  create_cluster
   deploy_ingress_controller
   create_monitoring
-  create_localstack
-  deploy_services
+  # create_localstack
+  # deploy_services
 }
 
 function create_monitoring() {
   bash "deploy.sh" install-prometheus
   bash "deploy.sh" install-grafana
+  bash "deploy.sh" install-promtail
+  bash "deploy.sh" install-loki
 }
 
 function create_localstack() {
